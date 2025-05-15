@@ -1,87 +1,53 @@
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-const activeOscillators = new Map();
-const keysPressed = new Set();
-const baseFrequency = 220; // Base frequency (A3) - can be adjusted
+document.addEventListener("DOMContentLoaded", () => {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const activeOscillators = {};
 
-// Generate 70 unique frequencies
-const keys = [];
-for (let i = 0; i < 70; i++) {
-    const frequency = baseFrequency * Math.pow(2, i / 70); // Exponential scaling
-    const color = `hsl(${(i * 5) % 360}, 70%, 60%)`;
-    const name = `K${i + 1}`;
-    keys.push({ name, freq: frequency, color });
-}
+    function createSemisineWave(frequency) {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        gainNode.gain.value = 0.3;
 
-// Generate the grid of keys
-const keyGrid = document.getElementById("key-grid");
-keys.forEach(key => {
-    const keyElement = document.createElement("div");
-    keyElement.className = "key";
-    keyElement.style.backgroundColor = key.color;
-    keyElement.textContent = key.name;
+        // Create semisine waveform
+        const real = new Float32Array([0, 1, 0.5, 0, 0.25]);
+        const imag = new Float32Array(real.length);
+        const wave = audioContext.createPeriodicWave(real, imag);
 
-    keyElement.onpointerdown = () => onPointerDown(key.freq, key.name);
-    keyElement.onpointerup = () => onPointerUp(key.name);
-    keyElement.onpointerleave = () => onPointerUp(key.name);
-    keyElement.onpointercancel = () => onPointerUp(key.name);
-
-    keyGrid.appendChild(keyElement);
-});
-
-function playSound(frequency, keyId) {
-    if (activeOscillators.has(keyId)) return;
-
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-
-    const real = new Float32Array([0, 1]);
-    const imag = new Float32Array([0, 0.5]);
-    const wave = audioContext.createPeriodicWave(real, imag);
-    oscillator.setPeriodicWave(wave);
-
-    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-
-    oscillator.start();
-    activeOscillators.set(keyId, { oscillator, gainNode });
-}
-
-function stopSound(keyId) {
-    if (!activeOscillators.has(keyId)) return;
-
-    const { oscillator, gainNode } = activeOscillators.get(keyId);
-
-    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
-    oscillator.stop(audioContext.currentTime + 0.3);
-
-    setTimeout(() => {
-        oscillator.disconnect();
-        gainNode.disconnect();
-    }, 400);
-
-    activeOscillators.delete(keyId);
-}
-
-function onPointerDown(freq, keyId) {
-    playSound(freq, keyId);
-    keysPressed.add(keyId);
-}
-
-function onPointerUp(keyId) {
-    stopSound(keyId);
-    keysPressed.delete(keyId);
-}
-
-function stopAllSounds() {
-    for (const keyId of keysPressed) {
-        stopSound(keyId);
+        oscillator.setPeriodicWave(wave);
+        oscillator.frequency.value = frequency;
+        oscillator.connect(gainNode).connect(audioContext.destination);
+        return { oscillator, gainNode };
     }
-    keysPressed.clear();
-}
 
-// Global event listeners for pointer events
-document.addEventListener('pointerup', stopAllSounds);
-document.addEventListener('pointercancel', stopAllSounds);
+    function playSound(freq, key) {
+        if (!activeOscillators[key]) {
+            const { oscillator, gainNode } = createSemisineWave(freq);
+            oscillator.start();
+            activeOscillators[key] = { oscillator, gainNode };
+        }
+    }
+
+    function stopSound(key) {
+        if (activeOscillators[key]) {
+            const { oscillator, gainNode } = activeOscillators[key];
+            gainNode.gain.setTargetAtTime(0, audioContext.currentTime, 0.1);
+            oscillator.stop(audioContext.currentTime + 0.2);
+            delete activeOscillators[key];
+        }
+    }
+
+    document.querySelectorAll(".key").forEach(keyElement => {
+        const frequency = parseFloat(keyElement.dataset.freq);
+        const key = keyElement.dataset.name;
+
+        keyElement.addEventListener("mousedown", () => playSound(frequency, key));
+        keyElement.addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            playSound(frequency, key);
+        });
+
+        keyElement.addEventListener("mouseup", () => stopSound(key));
+        keyElement.addEventListener("mouseleave", () => stopSound(key));
+        keyElement.addEventListener("touchend", () => stopSound(key));
+        keyElement.addEventListener("touchcancel", () => stopSound(key));
+    });
+});
