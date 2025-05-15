@@ -1,93 +1,40 @@
-body {
+body, html {
+    margin: 0;
+    padding: 0;
+    background-color: #222;
+    color: #fff;
     font-family: Arial, sans-serif;
-    background-color: #121212;
-    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.synth-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
 }
 
-h1 {
-    margin-bottom: 10px;
-    font-size: 1.5rem;
-}
-
-#controls {
-    margin-bottom: 10px;
-    display: flex;
-    gap: 10px;
-}
-
-#controls button {
-    padding: 10px 20px;
-    background-color: #3498db;
-    border: none;
-    color: #ffffff;
-    cursor: pointer;
-    font-size: 1rem;
-    border-radius: 5px;
-}
-
-#controls button:active {
-    background-color: #1abc9c;
-}
-
-#keyboard {
+.key-grid {
     display: grid;
-    grid-template-columns: repeat(10, 60px);
-    grid-template-rows: repeat(7, 60px);
-    gap: 6px;
-    width: 100%;
-    max-width: 1000px;
-    padding: 10px;
-    box-sizing: border-box;
-    overflow-x: auto;
+    grid-template-columns: repeat(14, 1fr);
+    gap: 4px;
 }
 
 .key {
-    width: 60px;
-    height: 60px;
-    background-color: #3498db;
-    border: 1px solid #2980b9;
-    cursor: pointer;
+    width: 50px;
+    height: 50px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    color: #ffffff;
-    font-size: 1rem;
+    align-items: center;
+    cursor: pointer;
     user-select: none;
-    border-radius: 5px;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: transform 0.1s;
 }
 
-.key.active {
-    background-color: #1abc9c;
-}
-
-@media (max-width: 768px) {
-    #keyboard {
-        grid-template-columns: repeat(5, 70px);
-        grid-template-rows: repeat(6, 70px);
-    }
-
-    .key {
-        width: 70px;
-        height: 70px;
-        font-size: 1.2rem;
-    }
-}
-
-@media (max-width: 480px) {
-    #keyboard {
-        grid-template-columns: repeat(4, 80px);
-        grid-template-rows: repeat(7, 80px);
-    }
-
-    .key {
-        width: 80px;
-        height: 80px;
-        font-size: 1.4rem;
-    }
+.key:active {
+    transform: scale(0.95);
 }
