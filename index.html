@@ -10,42 +10,7 @@
 <body>
 
 <div class="synth-container">
-    <div class="key-grid">
-        <!-- 5x14 grid of keys generated using JavaScript -->
-        <script>
-            const keys = [
-                { name: "C", freq: 264.00, color: "#FF9999" },
-                { name: "C#", freq: 275.00, color: "#FF6666" },
-                { name: "D", freq: 293.33, color: "#FF3333" },
-                { name: "D#", freq: 309.38, color: "#FF0000" },
-                { name: "E", freq: 330.00, color: "#CC0000" },
-                { name: "F", freq: 352.00, color: "#990000" },
-                { name: "F#", freq: 366.67, color: "#660000" },
-                { name: "G", freq: 396.00, color: "#FFCC99" },
-                { name: "G#", freq: 412.50, color: "#FF9966" },
-                { name: "A", freq: 440.00, color: "#FF6633" },
-                { name: "A#", freq: 469.33, color: "#FF3300" },
-                { name: "B", freq: 495.00, color: "#CC3300" },
-                { name: "C2", freq: 528.00, color: "#990000" },
-                { name: "C#2", freq: 550.00, color: "#660000" }
-            ];
-
-            for (let i = 0; i < 5; i++) {
-                keys.forEach(key => {
-                    document.write(`
-                        <div class="key" 
-                             style="background-color: ${key.color}" 
-                             onpointerdown="onPointerDown(${key.freq}, '${key.name}')" 
-                             onpointerup="onPointerUp('${key.name}')"
-                             onpointerleave="onPointerUp('${key.name}')"
-                             onpointercancel="onPointerUp('${key.name}')">
-                            ${key.name}
-                        </div>
-                    `);
-                });
-            }
-        </script>
-    </div>
+    <div class="key-grid" id="key-grid"></div>
 </div>
 
 <script src="synth.js"></script>
