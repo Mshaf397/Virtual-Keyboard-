@@ -3,12 +3,11 @@ function playSound(frequency) {
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
 
-    // Semisine waveform: Custom waveform resembling a sine wave
-    const waveArray = new Float32Array(256);
-    for (let i = 0; i < 256; i++) {
-        waveArray[i] = Math.sin((i / 256) * Math.PI);
-    }
-    const wave = audioContext.createPeriodicWave(waveArray, waveArray);
+    // Define the semisine waveform
+    const real = new Float32Array([0, 1]);
+    const imag = new Float32Array([0, 0.5]);  // Adjust the 0.5 value to control the shape
+
+    const wave = audioContext.createPeriodicWave(real, imag);
     oscillator.setPeriodicWave(wave);
 
     oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
