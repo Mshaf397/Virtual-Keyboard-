@@ -11,7 +11,7 @@
 
 <div class="synth-container">
     <div class="key-grid">
-        <!-- 5x14 grid of keys -->
+        <!-- 5x14 grid of keys generated using JavaScript -->
         <script>
             const keys = [
                 { name: "C", freq: 261.63, color: "#FF9999" },
@@ -33,8 +33,12 @@
             for (let i = 0; i < 5; i++) {
                 keys.forEach(key => {
                     document.write(`
-                        <div class="key" style="background-color: ${key.color}" 
-                             onclick="playSound(${key.freq})">
+                        <div class="key" 
+                             style="background-color: ${key.color}" 
+                             onpointerdown="onPointerDown(${key.freq}, '${key.name}')" 
+                             onpointerup="onPointerUp('${key.name}')"
+                             onpointerleave="onPointerUp('${key.name}')"
+                             onpointercancel="onPointerUp('${key.name}')">
                             ${key.name}
                         </div>
                     `);
