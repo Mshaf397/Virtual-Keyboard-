@@ -1,5 +1,6 @@
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const activeOscillators = new Map();
+const keysPressed = new Set();
 
 function playSound(frequency, keyId) {
     if (activeOscillators.has(keyId)) return;
@@ -39,9 +40,6 @@ function stopSound(keyId) {
     activeOscillators.delete(keyId);
 }
 
-// Keep track of keys currently pressed
-const keysPressed = new Set();
-
 function onPointerDown(freq, keyId) {
     playSound(freq, keyId);
     keysPressed.add(keyId);
@@ -52,7 +50,6 @@ function onPointerUp(keyId) {
     keysPressed.delete(keyId);
 }
 
-// Stop all sounds on pointer up outside keys
 function stopAllSounds() {
     for (const keyId of keysPressed) {
         stopSound(keyId);
@@ -60,7 +57,6 @@ function stopAllSounds() {
     keysPressed.clear();
 }
 
-// Add global event listeners to stop sounds on mouseup or touchend outside keys
-document.addEventListener('mouseup', stopAllSounds);
-document.addEventListener('touchend', stopAllSounds);
-document.addEventListener('touchcancel', stopAllSounds);
+// Global event listeners to handle pointer up and cancel
+document.addEventListener('pointerup', stopAllSounds);
+document.addEventListener('pointercancel', stopAllSounds);
