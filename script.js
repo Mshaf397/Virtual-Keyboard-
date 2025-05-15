@@ -15,6 +15,12 @@ document.getElementById("startAudio").addEventListener("click", () => {
     }
 });
 
+// Panic button to stop all notes
+document.getElementById("panicButton").addEventListener("click", () => {
+    stopAllNotes();
+    console.log("Panic Button Pressed - All Notes Stopped");
+});
+
 // Create the keyboard keys
 const keyboard = document.getElementById("keyboard");
 
@@ -78,7 +84,7 @@ function stopNote(e) {
     }
 }
 
-// Stop all notes when the mouse is released
+// Stop all notes when the mouse is released or panic is activated
 function stopAllNotes() {
     for (const keyId in activeOscillators) {
         activeOscillators[keyId].stop();
