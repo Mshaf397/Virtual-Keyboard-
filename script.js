@@ -32,12 +32,17 @@ for (let row = 0; row < 14; row++) {
         key.dataset.frequency = frequencies[row][col];
         key.dataset.keyId = `${row}-${col}`;
 
+        // Mouse Events
         key.addEventListener("mousedown", playNote);
+        key.addEventListener("mouseup", stopNote);
         key.addEventListener("mouseenter", (e) => {
             if (isMouseDown) playNote(e);
         });
-        key.addEventListener("mouseup", stopNote);
-        key.addEventListener("mouseleave", stopNote);
+
+        // Touch Events
+        key.addEventListener("touchstart", playNote, { passive: false });
+        key.addEventListener("touchend", stopNote, { passive: false });
+        key.addEventListener("touchmove", handleTouchMove, { passive: false });
 
         keyboard.appendChild(key);
     }
@@ -57,6 +62,7 @@ document.addEventListener("mouseup", () => {
 function playNote(e) {
     if (!audioContext) return;
 
+    e.preventDefault();
     const keyId = e.target.dataset.keyId;
     const frequency = parseFloat(e.target.dataset.frequency);
 
@@ -72,8 +78,20 @@ function playNote(e) {
     }
 }
 
+// Handle touch movement
+function handleTouchMove(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+
+    if (target && target.classList.contains("key")) {
+        playNote({ target });
+    }
+}
+
 // Stop a note
 function stopNote(e) {
+    e.preventDefault();
     const keyId = e.target.dataset.keyId;
 
     if (activeOscillators[keyId]) {
@@ -84,7 +102,7 @@ function stopNote(e) {
     }
 }
 
-// Stop all notes when the mouse is released or panic is activated
+// Stop all notes
 function stopAllNotes() {
     for (const keyId in activeOscillators) {
         activeOscillators[keyId].stop();
