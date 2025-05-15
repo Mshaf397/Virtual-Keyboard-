@@ -11,11 +11,14 @@ body {
 }
 
 h1 {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
 }
 
 #controls {
     margin-bottom: 10px;
+    display: flex;
+    gap: 10px;
 }
 
 #controls button {
@@ -24,8 +27,8 @@ h1 {
     border: none;
     color: #ffffff;
     cursor: pointer;
-    font-size: 14px;
-    margin-right: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
 }
 
 #controls button:active {
@@ -34,15 +37,19 @@ h1 {
 
 #keyboard {
     display: grid;
-    grid-template-columns: repeat(20, 40px);
-    grid-template-rows: repeat(14, 40px);
-    gap: 4px;
-    margin-bottom: 10px;
+    grid-template-columns: repeat(10, 60px);
+    grid-template-rows: repeat(7, 60px);
+    gap: 6px;
+    width: 100%;
+    max-width: 1000px;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-x: auto;
 }
 
 .key {
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     background-color: #3498db;
     border: 1px solid #2980b9;
     cursor: pointer;
@@ -50,10 +57,37 @@ h1 {
     align-items: center;
     justify-content: center;
     color: #ffffff;
-    font-size: 12px;
+    font-size: 1rem;
     user-select: none;
+    border-radius: 5px;
 }
 
 .key.active {
     background-color: #1abc9c;
+}
+
+@media (max-width: 768px) {
+    #keyboard {
+        grid-template-columns: repeat(5, 70px);
+        grid-template-rows: repeat(6, 70px);
+    }
+
+    .key {
+        width: 70px;
+        height: 70px;
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #keyboard {
+        grid-template-columns: repeat(4, 80px);
+        grid-template-rows: repeat(7, 80px);
+    }
+
+    .key {
+        width: 80px;
+        height: 80px;
+        font-size: 1.4rem;
+    }
 }
