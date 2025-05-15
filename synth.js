@@ -1,6 +1,32 @@
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const activeOscillators = new Map();
 const keysPressed = new Set();
+const baseFrequency = 220; // Base frequency (A3) - can be adjusted
+
+// Generate 70 unique frequencies
+const keys = [];
+for (let i = 0; i < 70; i++) {
+    const frequency = baseFrequency * Math.pow(2, i / 70); // Exponential scaling
+    const color = `hsl(${(i * 5) % 360}, 70%, 60%)`;
+    const name = `K${i + 1}`;
+    keys.push({ name, freq: frequency, color });
+}
+
+// Generate the grid of keys
+const keyGrid = document.getElementById("key-grid");
+keys.forEach(key => {
+    const keyElement = document.createElement("div");
+    keyElement.className = "key";
+    keyElement.style.backgroundColor = key.color;
+    keyElement.textContent = key.name;
+
+    keyElement.onpointerdown = () => onPointerDown(key.freq, key.name);
+    keyElement.onpointerup = () => onPointerUp(key.name);
+    keyElement.onpointerleave = () => onPointerUp(key.name);
+    keyElement.onpointercancel = () => onPointerUp(key.name);
+
+    keyGrid.appendChild(keyElement);
+});
 
 function playSound(frequency, keyId) {
     if (activeOscillators.has(keyId)) return;
@@ -20,7 +46,6 @@ function playSound(frequency, keyId) {
     gainNode.connect(audioContext.destination);
 
     oscillator.start();
-
     activeOscillators.set(keyId, { oscillator, gainNode });
 }
 
@@ -57,6 +82,6 @@ function stopAllSounds() {
     keysPressed.clear();
 }
 
-// Global event listeners to handle pointer up and cancel
+// Global event listeners for pointer events
 document.addEventListener('pointerup', stopAllSounds);
 document.addEventListener('pointercancel', stopAllSounds);
