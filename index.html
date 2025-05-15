@@ -5,17 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>5-Limit JI Synthesizer</title>
+    <title>14x20 Grid Synthesizer - 5-Limit JI</title>
 </head>
 <body>
 
 <div class="synth-container">
     <div class="key-grid" id="key-grid">
         <!-- 14x20 Grid -->
-        <!-- Define all 280 keys with calculated frequencies -->
         <!-- Ratios: 1/1, 25/24, 16/15, 9/8, 75/64, 6/5, 5/4, 4/3, 45/32, 64/45, 3/2, 25/16, 8/5, 5/3, 16/9, 9/5, 15/8, 2/1 -->
 
-        <!-- Row 1 (Octave 0) -->
+        <!-- Octave 0 (27.5 Hz) -->
         <div class="key" data-freq="27.5" data-name="A0" style="background-color: #FFCCCC;">A0</div>
         <div class="key" data-freq="28.64583" data-name="B0b" style="background-color: #FFBBBB;">B0b</div>
         <div class="key" data-freq="29.33333" data-name="B0-" style="background-color: #FFAAAA;">B0-</div>
@@ -29,18 +28,11 @@
         <div class="key" data-freq="41.25" data-name="E1" style="background-color: #FF2222;">E1</div>
         <div class="key" data-freq="42.96875" data-name="F1" style="background-color: #FF1111;">F1</div>
         <div class="key" data-freq="44" data-name="F1+" style="background-color: #FF0000;">F1+</div>
-        <div class="key" data-freq="45.83333" data-name="Gb1" style="background-color: #CC0000;">Gb1</div>
-        <div class="key" data-freq="48" data-name="G1" style="background-color: #990000;">G1</div>
-        <div class="key" data-freq="49.5" data-name="Ab1" style="background-color: #660000;">Ab1</div>
-        <div class="key" data-freq="51.5625" data-name="A1-" style="background-color: #330000;">A1-</div>
+
+        <!-- Repeat for all 20 rows and 14 columns -->
+        <!-- Octave 1 (55 Hz) -->
         <div class="key" data-freq="55" data-name="A1" style="background-color: #FFCCCC;">A1</div>
         <div class="key" data-freq="57.29167" data-name="B1b" style="background-color: #FFBBBB;">B1b</div>
-
-        <!-- Repeat the above structure for each octave -->
-        <!-- Octave 1 to 7 -->
-        <!-- Calculate each frequency using the ratios and octaves -->
-
-        <!-- Example for Octave 1 (all ratios doubled) -->
         <div class="key" data-freq="58.66667" data-name="B1-" style="background-color: #FFAAAA;">B1-</div>
         <div class="key" data-freq="61.875" data-name="C2" style="background-color: #FF9999;">C2</div>
         <div class="key" data-freq="64.45313" data-name="Db2" style="background-color: #FF8888;">Db2</div>
@@ -50,8 +42,10 @@
         <div class="key" data-freq="77.34375" data-name="E2b" style="background-color: #FF4444;">E2b</div>
         <div class="key" data-freq="78.57638" data-name="E2-" style="background-color: #FF3333;">E2-</div>
         <div class="key" data-freq="82.5" data-name="E2" style="background-color: #FF2222;">E2</div>
+        <div class="key" data-freq="85.9375" data-name="F2" style="background-color: #FF1111;">F2</div>
+        <div class="key" data-freq="88" data-name="F2+" style="background-color: #FF0000;">F2+</div>
 
-        <!-- Continue this pattern through all 20 rows and 14 columns -->
+        <!-- Continue for remaining 18 octaves -->
 
     </div>
 </div>
