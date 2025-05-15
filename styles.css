@@ -19,6 +19,7 @@ h1 {
     grid-template-columns: repeat(20, 40px);
     grid-template-rows: repeat(14, 40px);
     gap: 4px;
+    margin-bottom: 10px;
 }
 
 .key {
@@ -32,8 +33,22 @@ h1 {
     justify-content: center;
     color: #ffffff;
     font-size: 12px;
+    user-select: none;
 }
 
 .key:active {
+    background-color: #1abc9c;
+}
+
+#startAudio {
+    padding: 10px 20px;
+    background-color: #3498db;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#startAudio:active {
     background-color: #1abc9c;
 }
