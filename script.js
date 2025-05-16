@@ -1,6 +1,6 @@
 const context = new (window.AudioContext || window.webkitAudioContext)();
 const startFrequency = 220; // A3
-const numKeys = 6 * 13;
+const numKeys = 16 * 13;
 const semitoneRatio = Math.pow(2, 1 / 50);
 
 // To keep track of active oscillators
