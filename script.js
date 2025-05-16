@@ -1,19 +1,23 @@
 const context = new (window.AudioContext || window.webkitAudioContext)();
-const startFrequency = 220; // A3
-const numKeys = 14 * 11;
-const semitoneRatio = Math.pow(2, 1 / 12.25);
-
-// To keep track of active oscillators
+const startFrequency = 110; // A2
+const numKeys = 140; // Fixed number of keys
 const activeOscillators = {};
+let currentEDO = 12;
+
+const presetSelect = document.getElementById("preset-select");
+presetSelect.addEventListener("change", (e) => {
+    currentEDO = parseInt(e.target.value);
+    generateKeys();
+});
 
 function calculateFrequency(index) {
-    return startFrequency * Math.pow(semitoneRatio, index);
+    const stepRatio = Math.pow(2, 1 / currentEDO);
+    return startFrequency * Math.pow(stepRatio, index);
 }
 
 function calculateCents(index) {
-    const referenceIndex = 0;  // A3 as the reference (0 cents)
-    const cents = index * 98;
-    return cents;
+    const cents = (1200 / currentEDO) * index;
+    return cents.toFixed(2);
 }
 
 function playFrequency(index) {
@@ -32,7 +36,6 @@ function playFrequency(index) {
     gainNode.connect(context.destination);
 
     oscillator.start();
-
     activeOscillators[index] = { oscillator, gainNode };
 }
 
@@ -57,7 +60,6 @@ function createKey(index) {
     key.addEventListener("mouseup", () => stopFrequency(index));
     key.addEventListener("mouseleave", () => stopFrequency(index));
 
-    // Support for touch devices
     key.addEventListener("touchstart", (e) => {
         e.preventDefault();
         playFrequency(index);
@@ -69,6 +71,8 @@ function createKey(index) {
 
 function generateKeys() {
     const grid = document.getElementById("key-grid");
+    grid.innerHTML = "";
+    
     for (let i = 0; i < numKeys; i++) {
         const key = createKey(i);
         grid.appendChild(key);
