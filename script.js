@@ -10,10 +10,15 @@ function calculateFrequency(index) {
     return startFrequency * Math.pow(semitoneRatio, index);
 }
 
+function calculateCents(index) {
+    const referenceIndex = 0;  // A2 as the reference (0 cents)
+    const cents = index * 100;
+    return cents;
+}
+
 function playFrequency(index) {
     const frequency = calculateFrequency(index);
 
-    // Prevent multiple oscillators for the same key
     if (activeOscillators[index]) return;
 
     const oscillator = context.createOscillator();
@@ -28,7 +33,6 @@ function playFrequency(index) {
 
     oscillator.start();
 
-    // Store the oscillator so it can be stopped later
     activeOscillators[index] = { oscillator, gainNode };
 }
 
@@ -45,8 +49,9 @@ function stopFrequency(index) {
 function createKey(index) {
     const key = document.createElement("div");
     key.className = "key";
-    const frequency = calculateFrequency(index);
-    key.textContent = frequency.toFixed(2) + " Hz";
+
+    const cents = calculateCents(index);
+    key.textContent = `${cents}¢`;
 
     key.addEventListener("mousedown", () => playFrequency(index));
     key.addEventListener("mouseup", () => stopFrequency(index));
