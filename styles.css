@@ -24,16 +24,17 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: auto;  /* Scrollable */
 }
 
 .key-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 60px);
+    grid-template-columns: repeat(14, 60px);
     gap: 10px;
     justify-content: center;
-    align-content: center;
-    height: 100%;
-    overflow-y: auto;
+    align-content: start;
+    height: auto;
+    padding: 20px;
 }
 
 .key {
