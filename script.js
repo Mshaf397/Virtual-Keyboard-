@@ -1,6 +1,6 @@
 const context = new (window.AudioContext || window.webkitAudioContext)();
 const startFrequency = 110; // A2
-const numKeys = 14 * 20;
+const numKeys = 6 * 13;
 const semitoneRatio = Math.pow(2, 1 / 12);
 
 function calculateFrequency(index) {
