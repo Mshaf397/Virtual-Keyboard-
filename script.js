@@ -1,6 +1,8 @@
 const context = new (window.AudioContext || window.webkitAudioContext)();
-const startFrequency = 110; // A2
-const numKeys = 140; // Fixed number of keys
+const baseFrequency = 27.5; // A0
+const numColumns = 14;
+const numRows = 20;
+const numKeys = numColumns * numRows;
 const activeOscillators = {};
 let currentEDO = 12;
 
@@ -12,7 +14,7 @@ presetSelect.addEventListener("change", (e) => {
 
 function calculateFrequency(index) {
     const stepRatio = Math.pow(2, 1 / currentEDO);
-    return startFrequency * Math.pow(stepRatio, index);
+    return baseFrequency * Math.pow(stepRatio, index);
 }
 
 function calculateCents(index) {
@@ -72,7 +74,7 @@ function createKey(index) {
 function generateKeys() {
     const grid = document.getElementById("key-grid");
     grid.innerHTML = "";
-    
+
     for (let i = 0; i < numKeys; i++) {
         const key = createKey(i);
         grid.appendChild(key);
