@@ -1,7 +1,7 @@
 const context = new (window.AudioContext || window.webkitAudioContext)();
 const startFrequency = 27.5; // A0
-const numKeys = 11 * 10;
-const semitoneRatio = Math.pow(2, 1 / 21.82);
+const numKeys = 20 * 10;
+const semitoneRatio = Math.pow(2, 1 / 66.67);
 
 // To keep track of active oscillators
 const activeOscillators = {};
@@ -12,7 +12,7 @@ function calculateFrequency(index) {
 
 function calculateCents(index) {
     const referenceIndex = 0;  // A0 as the reference (0 cents)
-    const cents = index * 55;
+    const cents = index * 18;
     return cents;
 }
 
