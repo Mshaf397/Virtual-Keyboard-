@@ -3,11 +3,19 @@ const startFrequency = 110; // A2
 const numKeys = 6 * 13;
 const semitoneRatio = Math.pow(2, 1 / 12);
 
+// To keep track of active oscillators
+const activeOscillators = {};
+
 function calculateFrequency(index) {
     return startFrequency * Math.pow(semitoneRatio, index);
 }
 
-function playFrequency(frequency) {
+function playFrequency(index) {
+    const frequency = calculateFrequency(index);
+
+    // Prevent multiple oscillators for the same key
+    if (activeOscillators[index]) return;
+
     const oscillator = context.createOscillator();
     oscillator.type = "sine";
     oscillator.frequency.setValueAtTime(frequency, context.currentTime);
@@ -19,7 +27,19 @@ function playFrequency(frequency) {
     gainNode.connect(context.destination);
 
     oscillator.start();
-    oscillator.stop(context.currentTime + 0.5);
+
+    // Store the oscillator so it can be stopped later
+    activeOscillators[index] = { oscillator, gainNode };
+}
+
+function stopFrequency(index) {
+    const oscillatorData = activeOscillators[index];
+
+    if (oscillatorData) {
+        oscillatorData.gainNode.gain.setTargetAtTime(0, context.currentTime, 0.1);
+        oscillatorData.oscillator.stop(context.currentTime + 0.1);
+        delete activeOscillators[index];
+    }
 }
 
 function createKey(index) {
@@ -28,9 +48,16 @@ function createKey(index) {
     const frequency = calculateFrequency(index);
     key.textContent = frequency.toFixed(2) + " Hz";
 
-    key.addEventListener("mousedown", () => {
-        playFrequency(frequency);
+    key.addEventListener("mousedown", () => playFrequency(index));
+    key.addEventListener("mouseup", () => stopFrequency(index));
+    key.addEventListener("mouseleave", () => stopFrequency(index));
+
+    // Support for touch devices
+    key.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        playFrequency(index);
     });
+    key.addEventListener("touchend", () => stopFrequency(index));
 
     return key;
 }
