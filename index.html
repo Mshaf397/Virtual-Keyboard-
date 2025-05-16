@@ -2,54 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>14x20 Web Synthesizer - 7-limit JI</title>
+    <title>Web Synthesizer</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<h1>14x20 Web Synthesizer - 7-limit Just Intonation</h1>
-<div id="synth-grid"></div>
-
-<script>
-    const context = new (window.AudioContext || window.webkitAudioContext)();
-    const baseFrequency = 27.5;
-    const ratios = [1/1, 15/14, 9/8, 7/6, 9/7, 4/3, 7/5, 3/2, 14/9, 5/3, 7/4, 15/8, 2/1];
-    const gridRows = 14;
-    const gridCols = 20;
-
-    function calculateFrequency(base, ratio, octave) {
-        return base * ratio * Math.pow(2, octave);
-    }
-
-    function playTone(freq) {
-        const oscillator = context.createOscillator();
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(freq, context.currentTime);
-        oscillator.connect(context.destination);
-        oscillator.start();
-        oscillator.stop(context.currentTime + 0.5);
-    }
-
-    function createGrid() {
-        const gridContainer = document.getElementById('synth-grid');
-        for (let row = 0; row < gridRows; row++) {
-            for (let col = 0; col < gridCols; col++) {
-                const button = document.createElement('div');
-                const octave = Math.floor(row / 12);
-                const ratioIndex = row % ratios.length;
-                const frequency = calculateFrequency(baseFrequency, ratios[ratioIndex], octave);
-                button.className = 'key';
-                button.textContent = `${frequency.toFixed(2)} Hz`;
-                button.style.backgroundColor = `hsl(${(ratioIndex / ratios.length) * 360}, 100%, 50%)`;
-                button.addEventListener('mousedown', () => playTone(frequency));
-                gridContainer.appendChild(button);
-            }
-        }
-    }
-
-    createGrid();
-</script>
-
+    <div class="synth-container">
+        <div id="key-grid" class="key-grid"></div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
