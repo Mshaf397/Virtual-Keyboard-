@@ -5,20 +5,48 @@ const numRows = 20;
 const numKeys = numColumns * numRows;
 const activeOscillators = {};
 let currentEDO = 12;
+let customRatio = 2;  // Default to octave
 
 const presetSelect = document.getElementById("preset-select");
+const customInput = document.getElementById("custom-tuning");
+
 presetSelect.addEventListener("change", (e) => {
-    currentEDO = parseInt(e.target.value);
-    generateKeys();
+    const value = e.target.value;
+    if (value === "custom") {
+        customInput.style.display = "block";
+    } else {
+        customInput.style.display = "none";
+        currentEDO = parseInt(value);
+        generateKeys();
+    }
+});
+
+customInput.addEventListener("input", () => {
+    const input = customInput.value.trim();
+    const customMatch = input.match(/^(\d+)-ed(\d+\/\d+|\d+)$/);
+
+    if (customMatch) {
+        currentEDO = parseInt(customMatch[1]);
+        const ratioString = customMatch[2];
+
+        if (ratioString.includes("/")) {
+            const [num, denom] = ratioString.split("/").map(Number);
+            customRatio = num / denom;
+        } else {
+            customRatio = parseFloat(ratioString);
+        }
+
+        generateKeys();
+    }
 });
 
 function calculateFrequency(index) {
-    const stepRatio = Math.pow(2, 1 / currentEDO);
+    const stepRatio = Math.pow(customRatio, 1 / currentEDO);
     return baseFrequency * Math.pow(stepRatio, index);
 }
 
 function calculateCents(index) {
-    const cents = (1200 / currentEDO) * index;
+    const cents = (1200 * Math.log2(Math.pow(customRatio, index / currentEDO)));
     return cents.toFixed(2);
 }
 
