@@ -12,7 +12,7 @@ function calculateFrequency(index) {
 
 function calculateCents(index) {
     const referenceIndex = 0;  // A2 as the reference (0 cents)
-    const cents = index * 146.308;
+    const cents = index * 146;
     return cents;
 }
 
