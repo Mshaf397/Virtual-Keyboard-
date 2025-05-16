@@ -13,10 +13,12 @@ const customInput = document.getElementById("custom-tuning");
 presetSelect.addEventListener("change", (e) => {
     const value = e.target.value;
     if (value === "custom") {
-        customInput.style.display = "block";
+        customInput.style.display = "inline-block";  // Show input field
     } else {
-        customInput.style.display = "none";
+        customInput.style.display = "none";  // Hide input field
+        customInput.value = "";  // Clear custom input field
         currentEDO = parseInt(value);
+        customRatio = 2;  // Reset to octave for standard presets
         generateKeys();
     }
 });
